@@ -100,3 +100,8 @@ Set `BACKEND_URL` in the Vercel project's environment variables to the deployed 
 ## License
 
 [MIT](LICENSE)
+
+## Handsoff notes
+
+<!-- handsoff-issue-155 -->
+- #155: Reduced-motion media query doesn't cover the payment-row entry animation
