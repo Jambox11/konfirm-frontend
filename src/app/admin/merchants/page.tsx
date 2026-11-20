@@ -199,12 +199,12 @@ export default function AdminMerchantsPage() {
             <table className="admin-table" aria-labelledby="merchants-heading">
               <thead>
                 <tr>
-                  <th>Merchant</th>
-                  <th>Status</th>
-                  <th>Risk tier</th>
-                  <th>Stellar address</th>
-                  <th>Created (UTC)</th>
-                  <th></th>
+                  <th scope="col">Merchant</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Risk tier</th>
+                  <th scope="col">Stellar address</th>
+                  <th scope="col">Created (UTC)</th>
+                  <th scope="col"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -222,6 +222,52 @@ export default function AdminMerchantsPage() {
                         aria-label="Risk tier"
                         value={m.risk_tier}
                         disabled={pendingId === m.id}
-                        onChange={(e) => changeTier(m, e.ta
-
-/* … truncated 2022 chars — edit only what you need near the top … */
+                        onChange={(e) => changeTier(m, e.target.value as RiskTier)}
+                      >
+                        {RISK_TIERS.map((tier) => (
+                          <option key={tier} value={tier}>
+                            {tier}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="mono">{shortAddress(m.stellar_base_address)}</td>
+                    <td className="mono">{formatDate(m.created_at)}</td>
+                    <td>
+                      <div className="admin-row-actions">
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-sm"
+                          disabled={pendingId === m.id}
+                          onClick={() => toggleStatus(m)}
+                        >
+                          {m.status === "suspended" ? "Reactivate" : "Suspend"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-sm"
+                          disabled={pendingId === m.id}
+                          onClick={() => sendPasswordReset(m)}
+                        >
+                          Send reset
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {error && <div className="form-error">{error}</div>}
+        {!loading && !loadError && merchants.length > 0 && merchants.length % PAGE_SIZE === 0 && (
+          <div className="admin-load-more">
+            <button type="button" className="btn btn-ghost" disabled={loadingMore} onClick={loadMore}>
+              {loadingMore ? "Loading…" : "Load more"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
